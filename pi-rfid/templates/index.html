@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #000;
+            color: #15FF00;
+            line-height: 1.6;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            animation: glitch 2s infinite;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(2px, -2px); }
+            60% { transform: translate(-2px, -2px); }
+            80% { transform: translate(2px, 2px); }
+            100% { transform: translate(0); }
+        }
+
+        header p {
+            font-size: 1.3rem;
+            color: #15FF00;
+            margin-top: 10px;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            max-width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #15FF00;
+            border-radius: 5px;
+            box-shadow: 0 0 10px #15FF00;
+            margin-top: 20px;
+            table-layout: fixed;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #15FF00;
+            word-wrap: break-word;
+        }
+
+        th {
+            background: rgba(0, 0, 0, 0.8);
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        form {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #15FF00;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px #15FF00;
+            margin-top: 20px;
+        }
+
+        form input, form button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #15FF00;
+            border-radius: 5px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #15FF00;
+            font-size: 1rem;
+        }
+
+        form button {
+            background: #15FF00;
+            color: #000;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        form button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 5px #15FF00; /* Reduced glow effect */
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.2rem;
+            }
+            header p {
+                font-size: 1.1rem;
+            }
+            table {
+                font-size: 0.9rem;
+            }
+            main {
+                width: 100%;
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+            header p {
+                font-size: 1rem;
+            }
+            table {
+                font-size: 0.8rem;
+            }
+            form input, form button {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="fade-in active">
+        <h1>Attendance Management System</h1>
+        <p>Revolutionize your attendance tracking with RFID technology.</p>
+    </header>
+
+    <main>
+        <!-- Attendance Records -->
+        <section id="attendance-section" class="fade-in">
+            <h2 style="color: #15FF00; text-align: center;">Attendance Records</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Surname</th>
+                            <th>Arrival Time</th>
+                            <th>Departure Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendance-body">
+                        <!-- Attendance records will be dynamically inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- RFID Actions -->
+        <section>
+            <!-- RFID Reader Control -->
+            <form id="rfid-read-form" class="fade-in">
+                <h3>RFID Reader Control</h3>
+                <button type="button" id="start-read-rfid">Start Read RFID</button>
+            </form>
+
+            <!-- Add New User -->
+            <form id="rfid-write-form" class="fade-in">
+                <h3>Add New User</h3>
+                <label for="name">First Name:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="surname">Surname:</label>
+                <input type="text" id="surname" name="surname" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email">
+                <label for="phone">Phone Number:</label>
+                <input type="text" id="phone" name="phone">
+                <button type="button" id="register-rfid-card">Register RFID Card</button>
+            </form>
+        </section>
+    </main>
+
+    <!-- JavaScript for Staggered Animations and AJAX -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Function to fetch and display attendance data
+        function fetchAttendance() {
+            $.ajax({
+                url: '/attendance',
+                method: 'GET',
+                success: function(data) {
+                    const tbody = $('#attendance-body');
+                    tbody.empty(); // Clear existing rows
+                    data.forEach(record => {
+                        const row = `
+                            <tr>
+                                <td>${record.name}</td>
+                                <td>${record.surname}</td>
+                                <td>${record.arrived_at || 'Not Arrived'}</td>
+                                <td>${record.departed_at || 'Not Departed'}</td>
+                            </tr>
+                        `;
+                        tbody.append(row);
+                    });
+                },
+                error: function() {
+                    alert('Failed to fetch attendance data.');
+                }
+            });
+        }
+
+        // Fetch attendance data every 5 seconds
+        setInterval(fetchAttendance, 5000);
+
+        // Trigger the /run_read route when the "Start Read RFID" button is clicked
+        $('#start-read-rfid').on('click', function() {
+            $.ajax({
+                url: '/run_read',
+                method: 'POST',
+                success: function() {
+                    fetchAttendance(); // Refresh attendance data immediately
+                },
+                error: function() {
+                    alert('Failed to log visit/exit.');
+                }
+            });
+        });
+
+        // Handle form submission for adding a new user
+        $('#register-rfid-card').on('click', function() {
+            const formData = {
+                name: $('#name').val(),
+                surname: $('#surname').val(),
+                email: $('#email').val(),
+                phone: $('#phone').val()
+            };
+
+            $.ajax({
+                url: '/run_write',
+                method: 'POST',
+                data: formData,
+                success: function() {
+                    alert('User added successfully!');
+                    $('#rfid-write-form')[0].reset(); // Reset the form
+                },
+                error: function() {
+                    alert('Failed to add user.');
+                }
+            });
+        });
+
+        // Initial fetch of attendance data
+        fetchAttendance();
+
+        // Stagger animations
+        const sections = document.querySelectorAll('.fade-in');
+        let delay = 0;
+
+        sections.forEach(section => {
+            setTimeout(() => {
+                section.classList.add('active');
+            }, delay);
+            delay += 500; // Delay between each section
+        });
+
+        // Add glowing effect to buttons on hover
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(button => {
+            button.addEventListener('mouseenter', () => {
+                button.style.boxShadow = '0 0 5px #15FF00'; // Subtle glow effect
+            });
+            button.addEventListener('mouseleave', () => {
+                button.style.boxShadow = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
