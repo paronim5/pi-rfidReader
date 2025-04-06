@@ -96,9 +96,7 @@ sudo systemctl status rfid-server
 
 ---
 ---
----
----
----
+
 ## Aktivace ve škole
 Pro správné fungování webového rozhraní **Raspberry Pi a počítač nejsou připojeny ke stejné síti**:
 
